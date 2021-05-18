@@ -18,22 +18,35 @@ struct node {
     struct node *next;
     struct node *prev;
     uint8_t     data;
+    uint8_t     isTrue;
 }__attribute__((packed));
 
-void initNode(struct node *node, uint8_t data, struct node *prev, struct node *next)
+void initNode(struct node *node, uint8_t data, struct node *prev, struct node *next, uint8_t isTrue)
 {
     node->data = data;
     node->next = next;
     node->prev = prev;
+    if(isTrue) node->isTrue = 1;
+}
+
+void *findTrue(struct node *head)
+{
+    struct node *buf = head;
+    while(buf != NULL)
+    {
+        if(buf->isTrue) return buf;
+        buf = buf->next;
+    }
+    return NULL;
 }
 
 int main()
 {
     struct node first, second, third;
 
-    initNode(&first, 11, NULL, &second);
-    initNode(&second, 22, &first, &third);
-    initNode(&third, 33, &second, NULL);
+    initNode(&first, 11, NULL, &second, 0);
+    initNode(&second, 22, &first, &third, 0);
+    initNode(&third, 33, &second, NULL, 1);
 
     printf("Data from first node    : %d\n", first.data);
     printf("Data from second node   : %d\n", second.data);
@@ -55,6 +68,10 @@ int main()
 
     printf("Address of third.prev   : %s%p%s (second node)\n", KGRN, third.prev, KNRM);
     printf("Address of third.next   : %p\n", third.next);
+
+    //find node with true boolian
+    struct node *new = (struct node *)findTrue(&first);
+    if(new != NULL) printf("Value of data from node: %d\n", new->data);
 
 
 

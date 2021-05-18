@@ -1,1 +1,1 @@
-rm *.o append linkedlist
+rm *.o append linkedList
